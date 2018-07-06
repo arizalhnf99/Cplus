@@ -1,0 +1,245 @@
+//Muhammad Arizal Hanif  (06.2017.1.06869)
+//Muhammad Ilham Khoiri  (06.2017.1.06906)
+
+
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+
+using namespace std;
+
+struct idMhs {
+    int npm;
+    string nama;
+};
+
+struct alamat {
+    string dusun;
+    string desa;
+    string kecamatan;
+    string kabupaten;
+};
+
+struct pembayaran {
+    unsigned int hari, bulan, thn, lamapinjam, late;
+    signed int denda, bayar, total, kembalian, spp;
+};
+
+struct Mahasiswa {
+    idMhs dataMhs;
+    alamat dataAlamat;
+    pembayaran hitBayar;
+    string jamKuliah;
+    Mahasiswa *next;
+};
+
+Mahasiswa *front = nullptr, *rear = nullptr, *baru, *help1, *lst, *now, *hit;
+int counter=0, i, cari;
+
+void inisialisasi() {
+    front = nullptr;
+    rear = nullptr;
+};
+
+bool isEmpty() {
+    return front == nullptr && rear == nullptr;
+}
+
+void add() {
+    baru = new Mahasiswa;
+
+    system("clear");
+    counter++;
+    printf("Input NPM  : "); cin >> baru->dataMhs.npm;
+    printf("Input Nama : "); cin.sync(); cin.ignore(); getline(cin, baru->dataMhs.nama);
+    printf("Input Alamat\n");
+    printf("Dusun      : "); getline(cin, baru->dataAlamat.dusun);
+    printf("Desa       : "); getline(cin, baru->dataAlamat.desa);
+    printf("Kecamatan  : "); getline(cin, baru->dataAlamat.kecamatan);
+    printf("Kabupaten  : "); getline(cin, baru->dataAlamat.kabupaten);
+    printf("Mahasiswa [pagi/malam] : "); getline(cin, baru->jamKuliah);
+    if (isEmpty()){
+        front = rear = baru;
+    }else{
+        rear->next = baru;
+        rear = baru;
+    }
+    printf("\n\n");
+    system("clear");
+}; 
+
+void hitung() {
+    lst = new Mahasiswa;
+    now = new Mahasiswa;
+    hit = new Mahasiswa;
+    lst->hitBayar.hari = 25;
+    
+    cout << "\nTerakhir Bayar\n"; 
+    cout << "Bulan   : "; cin >> lst->hitBayar.bulan; 
+    cout << "Tahun   : "; cin >> lst->hitBayar.thn;
+    cout << "\nBayar Sekarang\n";
+    cout << "Tanggal : "; cin >> now->hitBayar.hari; 
+    cout << "Bulan   : "; cin >> now->hitBayar.bulan;
+    cout << "Tahun   : "; cin >> now->hitBayar.thn;
+    
+    hit->hitBayar.lamapinjam = (now->hitBayar.hari - lst->hitBayar.hari)
+    + ((now->hitBayar.bulan - lst->hitBayar.bulan) * 30) + ((now->hitBayar.thn - lst->hitBayar.thn) * 360)
+    - ((now->hitBayar.bulan - lst->hitBayar.bulan) * 6);
+    hit->hitBayar.late = hit->hitBayar.lamapinjam / 25;
+    if (help1->jamKuliah == "pagi"){
+        hit->hitBayar.spp = 1000000;
+        if(hit->hitBayar.lamapinjam > 25){
+            hit->hitBayar.denda = hit->hitBayar.late * 100000;
+        }else{
+            hit->hitBayar.denda = 0;
+        }
+        cout << "\nSPP      : Rp. " << hit->hitBayar.spp;
+        cout << "\nTelat    :     " << hit->hitBayar.late << " kali";
+        cout << "\nDenda    : Rp. " << hit->hitBayar.denda;
+        cout << "\n------------------------------";
+        hit->hitBayar.total = hit->hitBayar.spp + hit->hitBayar.denda;
+        cout << "\nTotal    : Rp. " << hit->hitBayar.total;
+        cout << "\nBayar    : Rp. "; cin >> hit->hitBayar.bayar;
+        hit->hitBayar.kembalian = hit->hitBayar.total - hit->hitBayar.bayar;
+        cout << "Kembali  : Rp. " << hit->hitBayar.kembalian;
+        cout << "\n\n";
+
+    }else if (help1->jamKuliah == "malam"){
+        hit->hitBayar.spp = 1100000;
+        if(hit->hitBayar.lamapinjam > 25){
+            hit->hitBayar.denda = hit->hitBayar.late * 110000;
+        }else{
+            hit->hitBayar.denda = 0;
+        }
+        cout << "\nSPP      : Rp. " << hit->hitBayar.spp;
+        cout << "\nTelat    :     " << hit->hitBayar.late << " kali";
+        cout << "\nDenda    : Rp. " << hit->hitBayar.denda;
+        cout << "\n----------------------------";
+        hit->hitBayar.total = hit->hitBayar.spp + hit->hitBayar.denda;
+        cout << "\nTotal    : Rp. " << hit->hitBayar.total;
+        cout << "\nBayar    : Rp. "; cin >> hit->hitBayar.bayar;
+        hit->hitBayar.kembalian = hit->hitBayar.total - hit->hitBayar.bayar;
+        cout << "\nKembali  : Rp. " << hit->hitBayar.kembalian;
+    }
+
+}
+    
+
+void sorting() {
+    help1 = front;
+    int temp1;
+    string temp2;
+    
+    for (i=0; i<counter; i++){
+        while(help1->next){
+            if (help1->dataMhs.npm > help1->next->dataMhs.npm){
+                temp1 = help1->dataMhs.npm;
+                help1->dataMhs.npm = help1->next->dataMhs.npm;
+                help1->next->dataMhs.npm = temp1;
+                temp2 = help1->dataMhs.nama;
+                help1->dataMhs.nama = help1->next->dataMhs.nama;
+                help1->next->dataMhs.nama = temp2;
+                temp2 = help1->dataAlamat.dusun;
+                help1->dataAlamat.dusun = help1->next->dataAlamat.dusun;
+                help1->next->dataAlamat.dusun = temp2;
+                temp2 = help1->dataAlamat.desa;
+                help1->dataAlamat.desa = help1->next->dataAlamat.desa;
+                help1->next->dataAlamat.desa = temp2;
+                temp2 = help1->dataAlamat.kecamatan;
+                help1->dataAlamat.kecamatan = help1->next->dataAlamat.kecamatan;
+                help1->next->dataAlamat.kecamatan = temp2;
+                temp2 = help1->dataAlamat.kabupaten;
+                help1->dataAlamat.kabupaten = help1->next->dataAlamat.kabupaten;
+                help1->next->dataAlamat.kabupaten = temp2;
+                temp2 = help1->jamKuliah;
+                help1->jamKuliah = help1->next->jamKuliah;
+                help1->next->jamKuliah = temp2;
+
+                help1 = help1->next;
+            }else{
+                help1 = help1->next;
+            }
+        }
+    }
+}
+
+
+void paid() {
+	bool found = false;
+    help1 = front;
+    
+    system("clear");
+    printf("Input NPM Mahasiswa : "); cin >> cari;
+	while ((help1 !=nullptr) && (!found)){
+		if (help1->dataMhs.npm == cari){
+			found = true;
+		}else{
+			help1 = help1->next;
+		}
+	}
+
+	if (found){
+        cout << "\nNPM : " << cari << " Mahasiwa [ " << help1->jamKuliah << " ]"; 
+        cout << "\n------------------------------";
+        cout << "\nNama       : " << help1->dataMhs.nama;
+        cout << "\nAlamat";
+        cout << "\nDusun      : " << help1->dataAlamat.dusun;
+        cout << "\nDesa       : " << help1->dataAlamat.desa;
+        cout << "\nKecamatan  : " << help1->dataAlamat.kecamatan;
+        cout << "\nKabupaten  : " << help1->dataAlamat.kabupaten;
+        cout << "\n------------------------------";
+        hitung();
+        cout << "\n\n";
+
+	}else{
+        printf("\nNPM : %d tidak terdaftar!\n\n", cari);
+	}
+  //  system("clear");
+}
+
+void view() {
+    sorting();
+
+    system("clear");
+    if (isEmpty()){
+        printf("Data Kosong!\n");
+    }else{
+
+        help1 = front;
+        while (help1 != nullptr) {
+            cout << "\nNPM        : " << help1->dataMhs.npm << " Mahasiwa [ " << help1->jamKuliah << " ]";
+            cout << "\nNama       : " << help1->dataMhs.nama;
+            cout << "\nAlamat";
+            cout << "\nDusun      : " << help1->dataAlamat.dusun;
+            cout << "\nDesa       : " << help1->dataAlamat.desa;
+            cout << "\nKecamatan  : " << help1->dataAlamat.kecamatan;
+            cout << "\nKabupaten  : " << help1->dataAlamat.kabupaten;
+            cout << "\n";
+            help1 = help1->next;
+        }
+    }
+    printf("\n\n");
+  //  system("clear");
+};
+
+int main()
+{
+    int choose;
+    bool exit = false;
+
+    inisialisasi();
+    do{
+        printf("PROGRAM PEMBAYARAN SPP KAMPUS ITatS\n1. TAMBAH MAHASISWA\n2. BAYAR SPP\n3. LIHAT DATA MAHASISWA\nCHOOSE : "); cin >> choose;
+        switch (choose){
+            case 1:
+                add();
+                break;
+            case 2:
+                paid();
+                break;
+            case 3:
+                view();
+                break;
+        }
+    }while (exit == false);
+    }
